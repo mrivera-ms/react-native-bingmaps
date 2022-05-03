@@ -1,3 +1,4 @@
+apply from: 'secrets.gradle'
 apply plugin: "com.android.application"
 
 import com.android.build.OutputFile
@@ -134,6 +135,10 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
+    buildTypes.each {
+        it.buildConfigField "String", "CREDENTIALS_KEY", "\"$credentialsKey\""
+    }
+
     defaultConfig {
         applicationId "com.bingmapssample2"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -269,6 +274,8 @@ dependencies {
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
+    implementation 'com.microsoft.maps:maps-sdk:1.2.0'
+
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.fbjni'
     }
@@ -289,6 +296,13 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+}
+
+repositories {
+        jcenter()
+        maven {
+          url 'https://microsoftmaps.jfrog.io/artifactory/Maven/'
+      }
 }
 
 if (isNewArchitectureEnabled()) {
